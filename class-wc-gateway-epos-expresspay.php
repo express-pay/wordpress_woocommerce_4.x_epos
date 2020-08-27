@@ -6,13 +6,15 @@
   Version: 1.0.0
   Author: ООО «ТриИнком»
   Author URI: https://express-pay.by/
+  License: GPLv2 or later
+  License URI: http://www.gnu.org/licenses/gpl-2.0.html
   WC requires at least: 4.0
   WC tested up to: 4.3
  */
 
 if(!defined('ABSPATH')) exit;
 
-define("EPOS_EXPRESSPAY_VERSION", "3.0.2");
+define("EPOS_EXPRESSPAY_VERSION", "1.0.0");
 
 add_action('plugins_loaded', 'init_epos_gateway', 0);
 
@@ -35,14 +37,14 @@ function init_epos_gateway() {
 
 		public function __construct() {
 			$this->id = "expresspay_epos";
-            $this->method_title = __('Экспресс Платежи: EPOS');
+            $this->method_title = __('Экспресс Платежи: EPOS', 'wordpress_epos_expresspay');
             $this->method_description = __('Прием платежей в системе EPOS сервис «Экспресс Платежи»','wordpress_epos_expresspay');
 			$this->plugin_dir = plugin_dir_url(__FILE__);
 
 			$this->init_form_fields();
 			$this->init_settings();
 
-			$this->title = $this->get_option('payment_methid_title');
+			$this->title = __("Экспресс Платежи: EPOS", 'wordpress_epos_expresspay');
 			$this->service_id = $this->get_option('service_id');
 			$this->service_provider_epos_code =$this->get_option('service_provider_epos_code');
 			$this->secret_word = $this->get_option('secret_key');
