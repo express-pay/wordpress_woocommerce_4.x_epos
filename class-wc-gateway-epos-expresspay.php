@@ -3,11 +3,11 @@
   Plugin Name: «Экспресс Платежи: EPOS» для WooCommerce
   Plugin URI: https://express-pay.by/cms-extensions/wordpress
   Description: «Экспресс Платежи» - плагин для интеграции с сервисом «Экспресс Платежи» (express-pay.by) через API. Плагин позволяет выставить счет в системе EPOS, получить и обработать уведомление о платеже в системе EPOS, выставлять счета для оплаты банковскими картами, получать и обрабатывать уведомления о платеже по банковской карте. Описание плагина доступно по адресу: <a target="blank" href="https://express-pay.by/cms-extensions/wordpress">https://express-pay.by/cms-extensions/wordpress</a>
-  Version: 3.1
+  Version: 1.0.0
   Author: ООО «ТриИнком»
   Author URI: https://express-pay.by/
   WC requires at least: 4.0
-  WC tested up to: 4.7
+  WC tested up to: 4.3
  */
 
 if(!defined('ABSPATH')) exit;
@@ -23,12 +23,12 @@ function add_wordpress_epos_expresspay($methods) {
 }
 
 function init_epos_gateway() {
-	if(!class_exists('WC_Payment_Gateway'))
+	if(!class_exists('WC_Payment_Gateway') or class_exists('Wordpress_epos_Expresspay') )
 		return;
 
 	add_filter('woocommerce_payment_gateways', 'add_wordpress_epos_expresspay');
 
-	load_plugin_textdomain("wordpress_epos_expresspay", false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
+	load_plugin_textdomain("wordpress_epos_expresspay", false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
 
 	class Wordpress_epos_Expresspay extends WC_Payment_Gateway {
 		private $plugin_dir;
@@ -36,7 +36,7 @@ function init_epos_gateway() {
 		public function __construct() {
 			$this->id = "expresspay_epos";
             $this->method_title = __('Экспресс Платежи: EPOS');
-            $this->method_description = __('Прием платежей в системе EPOS сервис «Экспресс Платежи»');
+            $this->method_description = __('Прием платежей в системе EPOS сервис «Экспресс Платежи»','wordpress_epos_expresspay');
 			$this->plugin_dir = plugin_dir_url(__FILE__);
 
 			$this->init_form_fields();
@@ -382,7 +382,7 @@ function init_epos_gateway() {
 
 			$order->update_status('failed', __('Счет не был выставлен', 'wordpress_erip_expresspay'));
 
-			echo '<h2>' . __('Ошибка выставления счета в системе EPOS', 'wordpress_erip_expresspay') . '</h2>';
+			echo '<h2>' . __('Ошибка выставления счета в системе ЕРИП', 'wordpress_erip_expresspay') . '</h2>';
 			echo __("При выполнении запроса произошла непредвиденная ошибка. Пожалуйста, повторите запрос позже или обратитесь в службу технической поддержки магазина", 'wordpress_erip_expresspay');
 
 			echo '<br/><br/><p class="return-to-shop"><a class="button wc-backward" href="' . wc_get_checkout_url() . '">' . __('Попробовать заново', 'wordpress_erip_expresspay') . '</a></p>';
